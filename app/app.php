@@ -24,13 +24,8 @@ include __DIR__.'/utils/xhprof.php';
 $boot = include __DIR__ . '/utils/boot.php';
 $boot = include __DIR__ . '/utils/boot-compiled.php';
 $boot = include __DIR__ . '/utils/boot-config.php';
-/** @var Application $app */
 $app  = $boot($config);
-$app->prepend(
-    function($request, $next) {
-    /** @var Request $request */
-    return $next?$next($request->withAttribute('closure', function(){;})) : null;
-});
+
 /*
  * run $app
  */

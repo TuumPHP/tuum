@@ -79,8 +79,4 @@ $routes->any( '/sample{*}', SampleController::class)->before(
  * create router stack 
  */
 
-$routeStack->setRoot('/');
-$routeStack->setRoot('/closure*');
-$routeStack->setRoot('/sample*');
-
 return $routeStack;
