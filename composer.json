@@ -1,0 +1,25 @@
+{
+  "name": "tuum/demo",
+  "description": "starter for TuumPHP web site.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Asao",
+      "email": "kamei@workspot.jp"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "classpreloader/classpreloader": "~1.0",
+    "tuum/web":"0.4.*",
+    "tuum/form":"0.1.*"
+  },
+  "repositories": [
+  ],
+  "autoload": {
+    "psr-4": {
+      "Demo\\": "src/"
+    }
+  }
+}
+
