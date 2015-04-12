@@ -73,30 +73,25 @@ Directory Structure
 
 ### Top Level
 
-*   app/
-
-contains scripts and configurations to construct a web application. It also contains ```views``` and ```documents``` directory as a default. 
-
-*   public/
-
-a public directory for web. 
-
-*   src/ 
-
-contains all the PHP classes. 
-
-*   var/
-
-contains variables that are not under VCS, such as logs, data, and cached data. 
+*   ```app/```: contains scripts and configurations to construct a web application. It also contains ```views/``` and ```documents/``` directory are here. 
+*   ```public/```: a public directory for web. 
+*   ```src/```: contains all the PHP classes. 
+*   ```var/```: contains variables that are not under VCS, such as logs, data, and cached data. 
 
 ### app/ Directory
 
-
+*   ```app.php```: main scripts for constructing and executing the web application. 
+*   ```config.php```: main configuration array for the web application. defines the location of ```routes.php```, ```views/```, ```documents/```, etc.
+*   ```routes.php```: main routes definitions. 
+*   ```config/```: main configuration of application classes. enviroment specific definitions are under this directory. 
+*   ```documents/```: a default directory for URL mapper files. 
+*   ```utils/```: a utility scripts for app.php. 
+*   ```views/```: a default directory for view templates. 
 
 View and Controller
 ----
 
-This section walks through how controller and view works by closely examining the workflow for a URL, ```http://localhost:8800/sample/create```. 
+This section walks through how controller and view works by closely examining the workflow. The exaple URL is, ```http://localhost:8800/sample/create```. 
 
 ### routes.php
 
@@ -163,7 +158,7 @@ TuumPHP comes with ```League/Container``` package. For this example, a ```Sample
 class SampleController extends AbstractController
 {
     use RouteDispatchTrait;
-
+I
     /**
      * @var SampleValidator
      */
@@ -205,12 +200,12 @@ This method simply returns a response of a sample/create view at ```app/views/sa
 
 Finally, the most exciting part of this example, the ```onInsert``` method is under the examination. 
 
-It does only returns a redirect back to the create form either;
+It only returns a response redirecting back to the create form, either with,
 
-*   with success message if validation is successful, or 
-*   with error messages and other necessary information.  
+*   success message if validation is successful, or 
+*   error messages and other necessary information.  
 
-> Again, please note that it returns to ```/create``` with respect to a basePath. 
+> Again, please note that it returns to ```/create``` path with respect to a basePath. 
 
 ```php
     /**
@@ -232,26 +227,27 @@ It does only returns a redirect back to the create form either;
     }
 ```
 
-The API looks similar to that of Laravel 4.2 (the source of __inspiration__). 
+> The API must be familiar to many; very similar to that of Laravel 4.2 (the source of __inspiration__). 
 
 In case of error, the redirect may have the following information:
 
-*   __withInput__: the original posted values,
-*   __withInputErrors__: the error messages associated to each input, and 
-*   __withError__: an overall error message to the user. 
+*   ```withInput```: the original posted values,
+*   ```withInputErrors```: the error messages associated to each input, and 
+*   ```withError```: an overall error message to the user. 
 
+> The information in the redirect is 1) stored as a session's flash data, 2) retrieved in the next session, 3) saved in ```$request``` as attributes, 4) copied to view response in ```respond()``` method, then finally 5) appears in the view template. 
 
 ### Create.php View
 
-Lastly, but the most complicated part of the example, the view template, is here. 
+Last but not least, the most complicated part of the examination is here, the view template. 
 
-The create form view is at ```app/views/sample/create.php```, which is an ugly pieace of PHP mingled with HTML code. 
+The create form template is at ```app/views/sample/create.php```, which is an ugly pieace of code that inter-mingles PHP with HTML code. 
 
 ```php
 <h1>Create Form</h1>
 
 <form method="post" action="">
-    <?= $view->data->hiddenTag('_token'); ?>
+    <?= $data->hiddenTag('_token'); ?>
     
     <?=
     $forms->formGroup(
@@ -269,10 +265,10 @@ The view template is rendered using ```Tuum/View``` renderer, which focused only
 
 The $view variable contains all the information passed from the ```onCreate``` and ```onInsert``` methods. 
 
-*   $view->data: contains data such as $name ('anonymous' for this example), 
-*   $view->message: error and success messages, 
-*   $view->input: old input from ```onInsert```, 
-*   $view->errors: validation error messages from ```onInsert```.
+*   ```$view->data```: contains data such as $name ('anonymous' for this example), 
+*   ```$view->message```: error and success messages, 
+*   ```$view->input```: old input from ```onInsert```, 
+*   ```$view->errors```: validation error messages from ```onInsert```.
 
 ##### $view->message
 
