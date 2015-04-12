@@ -3,9 +3,27 @@ TuumPHP Starter Repository
 
 A starter repository for TuumPHP web site. 
 
+TuumPHP is a basic web application (micro + view) framework inspired by beauty of middleware structure of StackPHP, simpleness of Slim Framework, and ease of development of Laravel. 
+
+> tbh, I wish TuumPHP is a bit too complicated compared to Slim. 
+
 ### License
 
 MIT lisense.
+
+### required packages
+
+TuumPHP uses following packages;
+
+*   Aura/Session,
+*   Phly/Http,
+*   Psr/Http-message,
+*   Monolog/Monolog,
+*   League/Container,
+*   League/Flysystem,
+*   Filp/Whoops.
+
+Uses Home grown template view and router (;´д｀)
 
 Getting Started
 ----
@@ -50,13 +68,39 @@ $routes->get( '/json', function($request) {
 and access ```http://localhost:8888/new``` or ```http://localhost:8888/json```, and you should see the text and json data above. 
 
 
-### view and controller
+Directory Structure
+----
 
-The controller and view template samples are at URL below:
+### Top Level
 
- ```http://localhost:8800/sample?name=TuumPHP```. 
+*   app/
 
-The routes file, ```app/routes.php```, converts the above URL request to a controller object by the following code;
+contains scripts and configurations to construct a web application. It also contains ```views``` and ```documents``` directory as a default. 
+
+*   public/
+
+a public directory for web. 
+
+*   src/ 
+
+contains all the PHP classes. 
+
+*   var/
+
+contains variables that are not under VCS, such as logs, data, and cached data. 
+
+### app/ Directory
+
+
+
+View and Controller
+----
+
+This section walks through how controller and view works by closely examining the workflow for a URL, ```http://localhost:8800/sample/create```. 
+
+### routes.php
+
+The above URL is defined in the ```app/routes.php``` as:
 
 ```php
 $routes
@@ -68,14 +112,193 @@ $routes
 });
 ```
 
-The ```SampleController``` class is in the ```src/``` directory which contains all the PHP classes. A closure type filter is set for the URL, by setting an attribute to the $request. 
+The trailing ```{*}``` in the route pattern, ```/sample{*}```, denotes that the router will match against any path starting /sample with any method; it also denotes the subsequent match will be using the trailing ```{*}```, that is ```/create``` for this example. 
+
+> The route also defines a before filter using a closure which sets an attribute ```current``` to be ```'controller'```. This variable is used for the main menu in a layout view. 
+
+### SampleController.php
+
+The ```SampleController``` class is at ```src/Site/SampleController.php```.
+
+A controller class usually extends ```Tuum\Web\Controller\AbstractController``` abstract class which provides some convenient functionality to controllers. (Yes, you do not have to extend the abstract class by implementing ApplicationInterface). 
+
+The ```Tuum\Web\Controller\RouteDispatchTrait``` provides even more convenient functionality to controllers with local route matching by returning a local routes from ```getRoutes``` method. For this example, ```'get:/create'``` and ```'post:/create'``` specifies which method to use for the routes. 
+
+> Please note that the local routes defined in this controller does not have so called ```BasePath```, which is ```/sample``` in this example, because the original routes uses ```{*}``` to match only the relavent part of the path. 
+
+```php
+<?php
+namespace Demo\Site;
+
+use Tuum\Web\Controller\AbstractController;
+use Tuum\Web\Controller\RouteDispatchTrait;
+use Tuum\Web\Psr7\Response;
+
+class SampleController extends AbstractController 
+{
+    use RouteDispatchTrait;
+
+    /**
+     * @return array
+     */
+    protected function getRoutes() 
+    {
+        return [
+            '/'       => 'welcome',
+            '/jump'   => 'jump',
+            '/jumper' => 'jumper',
+            '/forms'  => 'forms',
+            'get:/create'  => 'create',
+            'post:/create' => 'insert',
+            '/{name}' => 'hello',
+        ];
+    }
+    // more methods to follow...
+}
+```
+
+TuumPHP comes with ```League/Container``` package. For this example, a ```SampleValidator``` class is injected at the constructor. 
+
+```php
+class SampleController extends AbstractController
+{
+    use RouteDispatchTrait;
+
+    /**
+     * @var SampleValidator
+     */
+    private $validator;
+
+    /**
+     * @return SampleController
+     */
+    public function __construct(SampleValidator $validator)
+    {
+        $this->validator = $validator;
+    }
+    // more methods to follow...
+}
+```
+
+> Please do not look at the SampleValidator code. The code in the validator class is a sample-only quality. TuumPHP does not come with Validation package, so it is mocked up as a sample. 
+
+### SampleController::onCreate Method
+
+The controller adds ```on``` at the front of a method. For ```'get:/create' => 'create'```, the ```onCreate``` method is invoked.  
+
+```php
+    /**
+     * @return Response
+     */
+    protected function onCreate()
+    {
+        return $this->respond()
+            ->with('name', 'anonymous')
+            ->asView('sample/create');
+    }
+```
+
+This method simply returns a response of a sample/create view at ```app/views/sample/create.php``` with a default name of 'anonymous'. We will examine the view file in details later on. 
 
 
-The ```app/views``` contains templates used in this demo site, while 
+### SampleController::onInsert Method
+
+Finally, the most exciting part of this example, the ```onInsert``` method is under the examination. 
+
+It does only returns a redirect back to the create form either;
+
+*   with success message if validation is successful, or 
+*   with error messages and other necessary information.  
+
+> Again, please note that it returns to ```/create``` with respect to a basePath. 
+
+```php
+    /**
+     * @return Response
+     */
+    protected function onInsert()
+    {
+        if(!$this->validator->validate($this->request->getBodyParams())) {
+            return $this->redirect()
+                ->withInput($this->validator->getData())
+                ->withInputErrors($this->validator->getErrors())
+                ->withError('bad input.')
+                ->toBasePath('/create');
+        }
+        return $this->redirect()
+            ->withInput($this->validator->getData())
+            ->withMessage('good input.')
+            ->toBasePath('/create');
+    }
+```
+
+The API looks similar to that of Laravel 4.2 (the source of __inspiration__). 
+
+In case of error, the redirect may have the following information:
+
+*   __withInput__: the original posted values,
+*   __withInputErrors__: the error messages associated to each input, and 
+*   __withError__: an overall error message to the user. 
 
 
-Directory Structure
-----
+### Create.php View
 
-The ```app``` directory is for keeping scripts and configurations to construct a web application. In the ```app``` directory, the ```app.php``` is the PHP script that constructs and serves the web application. 
+Lastly, but the most complicated part of the example, the view template, is here. 
+
+The create form view is at ```app/views/sample/create.php```, which is an ugly pieace of PHP mingled with HTML code. 
+
+```php
+<h1>Create Form</h1>
+
+<form method="post" action="">
+    <?= $view->data->hiddenTag('_token'); ?>
+    
+    <?=
+    $forms->formGroup(
+        $forms->label('you name', 'name'),
+        '<input type="text" name="name" id="name" value="'
+        .$input->get('name', $data->raw('name'))
+        . '" placeholder="maybe your name" class="form-control"/>'
+    );?>
+    <?= $errors->get('name'); ?>
+```
+
+The view template is rendered using ```Tuum/View``` renderer, which focused only on managing layouts, sections, and blocks. The data in the view is in the $view variable. 
+
+##### $view
+
+The $view variable contains all the information passed from the ```onCreate``` and ```onInsert``` methods. 
+
+*   $view->data: contains data such as $name ('anonymous' for this example), 
+*   $view->message: error and success messages, 
+*   $view->input: old input from ```onInsert```, 
+*   $view->errors: validation error messages from ```onInsert```.
+
+##### $view->message
+
+contains messages from controllers. In this sample, the messages are rendered in the layout file. 
+
+##### $view->data
+
+A generic container for any data. This automatically escapes any string data: ```$data['name']```, ```$data->name```, and ```$data->get('name')```. The ```$data->raw('name')``` will return a raw value. 
+
+##### $view->input
+
+A container for original posted value via ```withInput``` method.  $input allows to access its original value using the HTML element's name like:
+
+```php
+$input->get('sns[twitter]')
+```
+
+The second argument is a default value when an original input is not defined:
+
+```php
+$input->get('name', $data->raw('name'))
+```
+
+> These API's are bit tedeous as compared to Laravel's. May introduce some integration. 
+
+##### $view->errors
+
+A container for validation error message from ```withInputErrors```. 
 
