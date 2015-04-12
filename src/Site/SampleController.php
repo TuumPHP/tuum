@@ -10,11 +10,16 @@ class SampleController extends AbstractController
     use RouteDispatchTrait;
 
     /**
+     * @var SampleValidator
+     */
+    private $validator;
+
+    /**
      * @return SampleController
      */
-    public static function forge()
+    public function __construct(SampleValidator $validator)
     {
-        return new self;
+        $this->validator = $validator;
     }
 
     /**
@@ -23,10 +28,12 @@ class SampleController extends AbstractController
     protected function getRoutes()
     {
         return [
-            '/'        => 'welcome',
+            '/'       => 'welcome',
             '/jump'   => 'jump',
             '/jumper' => 'jumper',
             '/forms'  => 'forms',
+            'get:/create'  => 'create',
+            'post:/create' => 'insert',
             '/{name}' => 'hello',
         ];
     }
@@ -83,5 +90,33 @@ class SampleController extends AbstractController
     {
         return $this->respond()
             ->asView('sample/forms');
+    }
+
+    /**
+     * @return Response
+     */
+    protected function onCreate()
+    {
+        return $this->respond()
+            ->with('name', 'anonymous')
+            ->asView('sample/create');
+    }
+
+    /**
+     * @return Response
+     */
+    protected function onInsert()
+    {
+        if(!$this->validator->validate($this->request->getBodyParams())) {
+            return $this->redirect()
+                ->withInput($this->validator->getData())
+                ->withInputErrors($this->validator->getErrors())
+                ->withError('bad input.')
+                ->toBasePath('/create');
+        }
+        return $this->redirect()
+            ->withInput($this->validator->getData())
+            ->withMessage('good input.')
+            ->toBasePath('/create');
     }
 }

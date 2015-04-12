@@ -39,6 +39,9 @@ $activate = function($case) use($current) {
             border-radius: 0;
             background-color: #e7e7e7;
         }
+        div#main {
+            margin-bottom: 8em;
+        }
     </style>
 </head>
 <body>
@@ -77,7 +80,7 @@ $activate = function($case) use($current) {
 
 <?php $this->renderAsSection('breadcrumb'); ?>
 
-<div class="container">
+<div class="container" id="main">
 
     <?= $this->getSection('jumbotron'); ?>
     
