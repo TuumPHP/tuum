@@ -3,9 +3,9 @@ TuumPHP Starter Repository
 
 A starter repository for TuumPHP web site. 
 
-TuumPHP is a basic web application (micro + view) framework inspired by beauty of middleware structure of StackPHP, simpleness of Slim Framework, and ease of development of Laravel. 
+TuumPHP is a basic (micro + view) web application framework inspired by clean middleware structure of StackPHP, simplicity of Slim Framework, and ease of development of Laravel. 
 
-> tbh, I wish TuumPHP is a bit too complicated compared to Slim. 
+> tbh, I feel TuumPHP is a bit too complicated compared to Slim. 
 
 ### License
 
@@ -15,15 +15,15 @@ MIT lisense.
 
 TuumPHP uses following packages;
 
-*   Aura/Session,
-*   Phly/Http,
-*   Psr/Http-message,
-*   Monolog/Monolog,
-*   League/Container,
-*   League/Flysystem,
-*   Filp/Whoops.
+*   [Aura/Session](https://github.com/auraphp/Aura.Session),
+*   [Phly/Http](https://github.com/phly/http),
+*   [Psr/Http-message](https://github.com/php-fig/http-message),
+*   [Monolog/Monolog](https://github.com/Seldaek/monolog),
+*   [League/Container](https://github.com/thephpleague/container),
+*   [League/Flysystem](https://github.com/thephpleague/flysystem),
+*   [Filp/Whoops](https://github.com/filp/whoops).
 
-Uses Home grown template view and router (;´д｀)
+Uses home grown [template view](https://github.com/TuumPHP/View) and [router](https://github.com/TuumPHP/Router) (;´д｀)
 
 Getting Started
 ----
@@ -57,15 +57,18 @@ So, how about adding the following code, somewhere after ```// add routes``` com
 ```php
 $routes->get( '/new', function($request) {
     /** @var Request $request */
-    return $request->respond()->asText('just added a new page!');
+    return $request->respond()
+    	->asText('just added a new page!');
 });
-$routes->get( '/json', function($request) {
+$routes->get( '/back', function($request) {
     /** @var Request $request */
-    return $request->respond()->asJson(['Hello' => 'World']);
+    return $request->redirect()
+    	->withMessage('just redirected')
+    	->toPath('/new');
 });
 ```
 
-and access ```http://localhost:8888/new``` or ```http://localhost:8888/json```, and you should see the text and json data above. 
+and access ```http://localhost:8888/new```, you should see the text, and accessing ```http://localhost:8888/json``` should redirect back to the ```/new``` page with message. 
 
 
 Directory Structure
