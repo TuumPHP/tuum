@@ -44,11 +44,11 @@ cd public
 php -S localhost:8888 index.php
 ```
 
+> please make the ```var/``` directory writable to the server.
+
 and access ```http://localhost:8888``` in a browser. 
 
-> please make the ```var/``` directory is writable by the server. 
-
-### simple routing using closure
+### simple routing using closures
 
 The directory, ```app/```, contains scripts and configurations to construct a web application. The ```app/routes.php``` file contains routes definitions. 
 
@@ -63,12 +63,12 @@ $routes->get( '/new', function($request) {
 $routes->get( '/back', function($request) {
     /** @var Request $request */
     return $request->redirect()
-    	->withMessage('just redirected')
+    	->withMessage('just redirected back')
     	->toPath('/new');
 });
 ```
 
-and access ```http://localhost:8888/new```, you should see the text, and accessing ```http://localhost:8888/json``` should redirect back to the ```/new``` page with message. 
+and access ```http://localhost:8888/new```, you should see the text, and accessing ```http://localhost:8888/json``` should redirect back to the ```/new``` page with a message. 
 
 
 Directory Structure
@@ -94,7 +94,7 @@ Directory Structure
 View and Controller
 ----
 
-This section walks through how controller and view works by closely examining the workflow. The exaple URL is, ```http://localhost:8800/sample/create```. 
+This section descrives how controller and view works by walking through the work flow for a URL: ```http://localhost:8800/sample/create```. 
 
 ### routes.php
 
@@ -110,28 +110,23 @@ $routes
 });
 ```
 
-The trailing ```{*}``` in the route pattern, ```/sample{*}```, denotes that the router will match against any path starting /sample with any method; it also denotes the subsequent match will be using the trailing ```{*}```, that is ```/create``` for this example. 
+which implies that ```SampleController``` class will handle any path starting with '/sample'. 
 
-> The route also defines a before filter using a closure which sets an attribute ```current``` to be ```'controller'```. This variable is used for the main menu in a layout view. 
+The trailing ```{*}``` in the route pattern denotes that the router will set the base path to ```/sample``` and the remaing path will be used for matching a route. 
+
+The route also defines a before filter using a closure which sets an attribute ```current``` to be ```'controller'```. This variable is used for the main menu in a layout view. The ```$request``` is returned back to the middleware chain by using ```$next``` callable. 
 
 ### SampleController.php
 
 The ```SampleController``` class is at ```src/Site/SampleController.php```.
 
-A controller class usually extends ```Tuum\Web\Controller\AbstractController``` abstract class which provides some convenient functionality to controllers. (Yes, you do not have to extend the abstract class by implementing ApplicationInterface). 
+A controller class may extend ```Tuum\Web\Controller\AbstractController``` abstract class which provides some convenient functionality to controllers. (Yes, you do not have to extend the class by implementing ApplicationInterface). 
 
-The ```Tuum\Web\Controller\RouteDispatchTrait``` provides even more convenient functionality to controllers with local route matching by returning a local routes from ```getRoutes``` method. For this example, ```'get:/create'``` and ```'post:/create'``` specifies which method to use for the routes. 
+The ```Tuum\Web\Controller\RouteDispatchTrait``` provides a controller based dispatching based on local routes returned by ```getRoutes``` method. For this example, ```'get:/create'``` and ```'post:/create'``` specifies which method to use for the routes. 
 
 > Please note that the local routes defined in this controller does not have so called ```BasePath```, which is ```/sample``` in this example, because the original routes uses ```{*}``` to match only the relavent part of the path. 
 
 ```php
-<?php
-namespace Demo\Site;
-
-use Tuum\Web\Controller\AbstractController;
-use Tuum\Web\Controller\RouteDispatchTrait;
-use Tuum\Web\Psr7\Response;
-
 class SampleController extends AbstractController 
 {
     use RouteDispatchTrait;
@@ -142,13 +137,8 @@ class SampleController extends AbstractController
     protected function getRoutes() 
     {
         return [
-            '/'       => 'welcome',
-            '/jump'   => 'jump',
-            '/jumper' => 'jumper',
-            '/forms'  => 'forms',
             'get:/create'  => 'create',
             'post:/create' => 'insert',
-            '/{name}' => 'hello',
         ];
     }
     // more methods to follow...
@@ -201,14 +191,10 @@ This method simply returns a response of a sample/create view at ```app/views/sa
 
 ### SampleController::onInsert Method
 
-Finally, the most exciting part of this example, the ```onInsert``` method is under the examination. 
+The ```onInsert``` method is far more complicated than create method. It returns a redirect response back to the create form. The redirect contains either of,
 
-It only returns a response redirecting back to the create form, either with,
-
-*   success message if validation is successful, or 
-*   error messages and other necessary information.  
-
-> Again, please note that it returns to ```/create``` path with respect to a basePath. 
+*   a success message if validation is successful, or 
+*   an error messages and other necessary information.  
 
 ```php
     /**
@@ -230,6 +216,7 @@ It only returns a response redirecting back to the create form, either with,
     }
 ```
 
+> Again, please note that it returns to ```/create``` path with respect to a basePath. 
 > The API must be familiar to many; very similar to that of Laravel 4.2 (the source of __inspiration__). 
 
 In case of error, the redirect may have the following information:
@@ -248,34 +235,38 @@ The create form template is at ```app/views/sample/create.php```, which is an ug
 
 ```php
 <h1>Create Form</h1>
-
 <form method="post" action="">
-    <?= $data->hiddenTag('_token'); ?>
+    <?= $view->data->hiddenTag('_token'); ?>
     
     <?=
-    $forms->formGroup(
-        $forms->label('you name', 'name'),
+    $view->forms->formGroup(
+        $view->forms->label('you name', 'name'),
         '<input type="text" name="name" id="name" value="'
-        .$input->get('name', $data->raw('name'))
+        .$view->input->get('name', $data->raw('name'))
         . '" placeholder="maybe your name" class="form-control"/>'
     );?>
-    <?= $errors->get('name'); ?>
+    <?= $view->errors->get('name'); ?>
 ```
 
 The view template is rendered using ```Tuum/View``` renderer, which focused only on managing layouts, sections, and blocks. The data in the view is in the $view variable. 
 
 ##### $view
 
-The $view variable contains all the information passed from the ```onCreate``` and ```onInsert``` methods. 
+The $view variable contains all the response data passed from the ```onCreate``` and ```onInsert``` methods. 
 
-*   ```$view->data```: contains data such as $name ('anonymous' for this example), 
 *   ```$view->message```: error and success messages, 
-*   ```$view->input```: old input from ```onInsert```, 
 *   ```$view->errors```: validation error messages from ```onInsert```.
+*   ```$view->input```: old input from ```onInsert```, 
+*   ```$view->data```: contains data such as $name ('anonymous' for this example), 
+*   ```$view->forms```: contains form generator with ```$view->input```.
 
 ##### $view->message
 
-contains messages from controllers. In this sample, the messages are rendered in the layout file. 
+contains messages from controllers' ```withMessage```, ```withAlert```, or ```withError` methods. In this sample, the messages are rendered in the layout file. 
+
+##### $view->errors
+
+A container for validation error message from ```withInputErrors```. 
 
 ##### $view->data
 
@@ -295,9 +286,14 @@ The second argument is a default value when an original input is not defined:
 $input->get('name', $data->raw('name'))
 ```
 
-> These API's are bit tedeous as compared to Laravel's. May introduce some integration. 
+##### $view->forms
 
-##### $view->errors
+A generic helper for building form elements. It also incorporates the ```$view->input``` above. For instance, 
 
-A container for validation error message from ```withInputErrors```. 
+```php
+$forms->text('sns[facebook]')->class('form-control')->placeholder('whatever but must have @ in it')->id();
+```
+
+will output a ```input:[type=text]``` element, while accessing ```$view->input->raw('sns[facebook]')``` internaly. 
+
 
