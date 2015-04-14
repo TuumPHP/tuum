@@ -55,11 +55,13 @@ class SampleValidator
     private function snsKind($name, $message='must contain @ mark')
     {
         $sns = $this->get('sns');
-        if(!isset($sns[$name])) {
-            $this->errors['sns'][$name] = $message;
+        if(!isset($sns[$name]) || !$sns[$name]) {
+            $this->errors['sns'][$name] = 'required value';
+            $this->isValid = false;
         }
-        if(strpos($sns[$name], '@') === false) {
+        elseif(strpos($sns[$name], '@') === false) {
             $this->errors['sns'][$name] = $message;
+            $this->isValid = false;
         }
     }
     

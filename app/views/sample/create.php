@@ -1,5 +1,13 @@
-<?php /** @var \Tuum\View\Renderer $this */ ?>
-<?php /** @var \Tuum\Web\View\Value $view */ ?>
+<?php
+/** @var \Tuum\View\Renderer $this */ 
+/** @var \Tuum\Web\View\Value $view */
+
+$forms = $view->forms;
+$data  = $view->data;
+$input = $view->inputs;
+$errors= $view->errors;
+
+?>
 
 <?php $this->blockAsSection('sample/sub-menu', 'sub-menu', ['current' => 'create']); ?>
 
@@ -9,14 +17,6 @@
 
 <?php $this->endSectionAs('breadcrumb'); ?>
 
-<?php
-/** @var Tuum\Form\Forms $forms */
-$forms = $this->service('forms');
-$data  = $view->data;
-$input = $view->inputs;
-$errors= $view->errors;
-
-?>
 <h1>Create Form</h1>
 
 <form method="post" action="">
@@ -40,23 +40,23 @@ $errors= $view->errors;
     <?=
     $forms->formGroup(
         $forms->label('memo', 'memo'),
-        '<textarea name="memo" id="memo" class="form-control" >'.$input->get('memo'). '</textarea>'
+        $forms->textArea('memo')->class('form-control')
     );
     ?>
     <?= $errors->get('memo'); ?>
     
     <?=
     $forms->formGroup(
-        $forms->label('SNS (facebook)', 'sns-facebook'),
-        '<input type="text" name="sns[facebook]" id="sns-facebook" value="'.$input->get('sns[facebook]'). '"  class="form-control" placeholder="whatever but must have @ in it" />'
+        $forms->label('SNS (facebook)', 'sns-facebook-'),
+        $forms->text('sns[facebook]')->class('form-control')->placeholder('whatever but must have @ in it')->id()
     );
     ?>
     <?= $errors->get('sns[facebook]'); ?>
 
     <?=
     $forms->formGroup(
-        $forms->label('SNS (twitter)', 'sns-twitter'),
-        '<input type="text" name="sns[twitter]" id="sns-twitter" value="'.$input->get('sns[twitter]'). '"  class="form-control" placeholder="whatever but must have @ in it" />'
+        $forms->label('SNS (twitter)', 'sns-twitter-'),
+        $forms->text('sns[twitter]')->class('form-control')->placeholder('whatever but must have @ in it')->id()
     );
     ?>
     <?= $errors->get('sns[twitter]'); ?>

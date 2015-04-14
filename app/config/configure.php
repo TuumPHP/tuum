@@ -45,8 +45,6 @@ $app->set(Web::RENDER_ENGINE, function() use($dic) {
         $locator->addRoot($doc_root);
     }
     $renderer = new Renderer($locator);
-    $renderer->register('forms', new Forms());
-    $renderer->register('dates', new Dates());
     $renderer->setLayout('layout/layout');
     $view = new \Tuum\Web\View\View($renderer, new \Tuum\Web\View\Value());
     return $view;
