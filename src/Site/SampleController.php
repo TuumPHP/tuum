@@ -15,7 +15,7 @@ class SampleController extends AbstractController
     private $validator;
 
     /**
-     * @return SampleController
+     * @param SampleValidator $validator
      */
     public function __construct(SampleValidator $validator)
     {
@@ -46,7 +46,7 @@ class SampleController extends AbstractController
     {
         return $this->respond()
             ->with('name', $name )
-            ->asView('sample/hello')
+            ->asView('controller/hello')
             ;
     }
 
@@ -57,7 +57,7 @@ class SampleController extends AbstractController
     {
         return $this->respond()
             ->with( 'name', $name )
-            ->asView('sample/welcome')
+            ->asView('controller/welcome')
             ;
     }
 
@@ -67,7 +67,7 @@ class SampleController extends AbstractController
     protected function onJump()
     {
         return $this->respond()
-            ->asView('sample/jump')
+            ->asView('controller/jump')
             ;
     }
 
@@ -89,7 +89,7 @@ class SampleController extends AbstractController
     protected function onForms()
     {
         return $this->respond()
-            ->asView('sample/forms');
+            ->asView('controller/forms');
     }
 
     /**
@@ -99,7 +99,7 @@ class SampleController extends AbstractController
     {
         return $this->respond()
             ->with('name', 'anonymous')
-            ->asView('sample/create');
+            ->asView('controller/create');
     }
 
     /**

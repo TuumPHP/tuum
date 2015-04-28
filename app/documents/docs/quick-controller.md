@@ -17,13 +17,7 @@ routes.php
 The above URL is defined in the ```app/config/routes.php``` as:
 
 ```php
-$routes
-    ->any( '/sample{*}', SampleController::class)
-    ->before(function($request, $next) {
-        /** @var Request $request */
-        /** @var callable $next */
-        return $next? $next($request->withAttribute('current', 'controller')): null;
-});
+$routes->any( '/controller{*}', SampleController::class);
 ```
 
 which implies that ```SampleController``` class will handle any path starting with '/sample'. 
@@ -35,10 +29,20 @@ The route also defines a before filter using a closure which sets an attribute `
 SampleController.php
 ----
 
+#### Abstract Controller Class
 
 The ```SampleController``` class is at ```src/Site/SampleController.php```.
 
+```php
+class SampleController extends AbstractController 
+{
+    // more methods to follow...
+}
+```
+
 A controller class may extend ```Tuum\Web\Controller\AbstractController``` abstract class which provides some convenient functionality to controllers. (Yes, you do not have to extend the class by implementing ApplicationInterface). 
+
+#### RouteDispatchTrait
 
 The ```Tuum\Web\Controller\RouteDispatchTrait``` provides a controller based dispatching based on local routes returned by ```getRoutes``` method. For this example, ```'get:/create'``` and ```'post:/create'``` specifies which method to use for the routes. 
 
@@ -52,16 +56,16 @@ class SampleController extends AbstractController
     /**
      * @return array
      */
-    protected function getRoutes() 
-    {
+    protected function getRoutes() {
         return [
             'get:/create'  => 'create',
             'post:/create' => 'insert',
         ];
     }
-    // more methods to follow...
 }
 ```
+
+#### Dependency Injection
 
 TuumPHP comes with ```League/Container``` package. For this example, a ```SampleValidator``` class is injected at the constructor. 
 
@@ -70,19 +74,14 @@ class SampleController extends AbstractController
 {
     use RouteDispatchTrait;
 
-    /**
-     * @var SampleValidator
-     */
     private $validator;
 
     /**
-     * @return SampleController
+     * @param SampleValidator $validator
      */
-    public function __construct(SampleValidator $validator)
-    {
+    public function __construct(SampleValidator $validator) {
         $this->validator = $validator;
     }
-    // more methods to follow...
 }
 ```
 
@@ -127,12 +126,12 @@ The ```onInsert``` method is far more complicated than create method. It returns
                 ->withInput($this->validator->getData())
                 ->withInputErrors($this->validator->getErrors())
                 ->withError('bad input.')
-                ->toBasePath('/create');
+                ->toReferrer();
         }
         return $this->redirect()
             ->withInput($this->validator->getData())
             ->withMessage('good input.')
-            ->toBasePath('/create');
+            ->toReferrer();
     }
 ```
 

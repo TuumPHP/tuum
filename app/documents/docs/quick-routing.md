@@ -6,9 +6,9 @@ A quick overview of routing in Tuum framework.
 Routes File
 ----
 
-The directory, ```app/```, contains scripts and configurations to construct a web application. 
+The route file, ```app/config/routes.php``` is located in ```app/``` directory, 
+which also contains other scripts and configurations to construct a web application. 
 
-The routes are defined in ```app/config/routes.php``` file contains routes definitions. 
 
 ### RouterStack and RouteCollector
 
@@ -24,7 +24,11 @@ The ```$stack``` is the middleware for routing and dispatching a handler.
 
 The ```$routes``` collects routes for the application. 
 
-> The ```$stack``` must be returned at the end of the script.
+> The ```$stack``` must be returned at the end of the script. 
+> Or, return null to avoid registering any routes. 
+> ```
+> return $stack;
+> ```
 
 Routing Examples
 ----

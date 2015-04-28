@@ -1,10 +1,9 @@
-<?php
+<?php /** @var \Tuum\Web\View\Value $view */
 use Tuum\Form\Lists\Lists;
 use Tuum\Form\Lists\MonthList;
 use Tuum\Form\Lists\YearList;
 use Tuum\Web\View\Value;
 
-/** @var \Tuum\View\Renderer $this */
 /** @var Value $view */
 
 $forms = $view->forms;
@@ -13,7 +12,7 @@ $data  = $view->data;
 
 ?>
 
-<?php $this->blockAsSection('sample/sub-menu', 'sub-menu', ['current' => 'forms']); ?>
+<?php $this->blockAsSection('controller/sub-menu', 'sub-menu', ['current' => 'forms']); ?>
 
 <?php $this->startSection() ?>
 <li><a href="<?= $data->basePath; ?>?name=Controller Sample" >Controller Sample</a></li>

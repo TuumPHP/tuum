@@ -9,7 +9,7 @@ $errors= $view->errors;
 
 ?>
 
-<?php $this->blockAsSection('sample/sub-menu', 'sub-menu', ['current' => 'create']); ?>
+<?php $this->blockAsSection('controller/sub-menu', 'sub-menu', ['current' => 'create']); ?>
 
 <?php $this->startSection() ?>
 <li><a href="<?= $view->data->basePath; ?>?name=Controller Sample">Controller Sample</a></li>

@@ -27,6 +27,7 @@ $activate = function($case) use($current) {
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <!--suppress CssUnusedSymbol -->
     <style type="text/css">
         nav#footer {
             background-color: #f0f0f0;
@@ -68,7 +69,7 @@ $activate = function($case) use($current) {
             <ul class="nav navbar-nav">
                 <li<?= $activate('docs');?>><a href="/docs/index">Documents</a></li>
                 <li<?= $activate('closure');?>><a href="/closure/view">Closure Sample</a></li>
-                <li<?= $activate('sample');?>><a href="/sample?name=Tuum+framework">Controller Sample</a></li>
+                <li<?= $activate('controller');?>><a href="/controller?name=Tuum+framework">Controller Sample</a></li>
                 <li<?= $activate('demoTasks' );?>><a href="/demoTasks">Task Demo</a></li>
             </ul>
         </div>

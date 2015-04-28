@@ -1,6 +1,6 @@
-<?php /** @var \Tuum\View\Renderer $this */ ?>
+<?php /** @var \Tuum\Web\View\Value $view */ ?>
 
-<?php $this->blockAsSection('sample/sub-menu', 'sub-menu', ['current' => 'hello']); ?>
+<?php $this->blockAsSection('controller/sub-menu', 'sub-menu', ['current' => 'hello']); ?>
 
 <?php $this->startSection() ?>
 <li><a href="<?= $view->data->basePath; ?>?name=Controller Sample" >Controller Sample</a></li>

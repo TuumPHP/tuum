@@ -70,7 +70,7 @@ $routes->group(
  * add sample controller route
  */
 
-$routes->any( '/sample{*}', SampleController::class);
+$routes->any( '/controller{*}', SampleController::class);
 
 
 /** ---------------------------------------------------
