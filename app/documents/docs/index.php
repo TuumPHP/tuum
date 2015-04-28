@@ -1,29 +1,20 @@
-<?php /** @var \Tuum\View\Renderer $this */ ?>
-<?php /** @var \Tuum\Web\View\Value $view */ ?>
-
-<?php $view->data['current'] = 'maps'; ?>
-
-<?php $this->startSection() ?>
-<li><a href="/docs/index.php" >URL Map Sample</a></li>
-<li class="active">PHP File</li>
-<?php $this->endSectionAs('breadcrumb'); ?>
-
-<!Doctype html>
-<html>
-<head>
-    <title>TuumPHP is here</title>
-</head>
-<body>
 <h1>PHP View File</h1>
 <p>This is directly rendered from a PHP file.</p>
 
 <h3>URL Map Samples</h3>
 <ul>
-    <li><a href="docs/tuum.html" >html file</a></li>
-    <li><a href="docs/tuum.txt" >text file</a></li>
-    <li><a href="docs/tuum.md" >markdown file (not found)</a></li>
-    <li><a href="docs/errors.php" >php exception thrown</a></li>
+    <li><a href="tuum.html" >html file</a></li>
+    <li><a href="non-such.html">not found</a></li>
+    <li><a href="tuum" >text file</a> (<a href="tuum.txt" >raw text file</a>)</li>
+    <li><a href="marked" >markdown file</a> (<a href="marked.md" >raw markdown file</a>)</li>
+    <li><a href="errors" >php exception thrown</a></li>
 </ul>
 
-</body>
-</html>
+<h3>License</h3>
+
+<a href="/docs/license" >MIT License</a> (<a href="/docs/license.txt" >raw text</a>).
+
+<h3>System Requirements</h3>
+
+<p>Tuum framework is developed against PHP >= 5.6.0.</p>
+

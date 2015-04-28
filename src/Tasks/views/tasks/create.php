@@ -4,18 +4,11 @@ use Tuum\Web\View\Value;
 /** @var Value $view */
 
 $inputs   = $view->inputs;
+$forms    = $view->forms;
 $data     = $view->data;
-$basePath = $data['basePath'];
 $tasks    = $data->extractKey('tasks');
 
 ?>
-
-<?php $this->blockAsSection('tasks/sub-menu', 'sub-menu', ['current' => 'new', 'base' => $view->data->basePath]); ?>
-
-<?php $this->startSection() ?>
-<li><a href="<?= $view->data->basePath; ?>" >Task Demo</a></li>
-<li class="active">New Task</li>
-<?php $this->endSectionAs('breadcrumb'); ?>
 
 <h1>Task Demo / new task</h1>
 
@@ -23,15 +16,15 @@ $tasks    = $data->extractKey('tasks');
         <?= $data->hiddenTag('_token'); ?>
         <dl>
             
-            <dt>task</dt>
+            <dt><?= $forms->label('task', 'task'); ?></dt>
             <dd>
-                <input type="text" name="task" value="<?= $inputs->get('task', $data['task']);?>" placeholder="add a new task..." style="width: 40em;"/>
+                <?= $forms->text('task')->placeholder('add a new task...')->width('40em')->id(); ?>
                 <?= $view->errors->get('task'); ?>
             </dd>
             
-            <dt>done by</dt>
+            <dt><label for="done-by">done by</label></dt>
             <dd>
-                <label><input type="date" name="done_by" value="<?= $inputs->get('done_by', $data['done_by']); ?>" /></label>
+                <?= $forms->date('done_by', $data['done_by'])->id(); ?>
                 <?= $view->errors->get('done_by'); ?>
             </dd>
             

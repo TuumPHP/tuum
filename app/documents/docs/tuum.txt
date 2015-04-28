@@ -1,6 +1,4 @@
-TuumPHP is Here
-===============
+Tuum is Here
 
-Hello world
-
+Hello world.
 This is from a text file. 

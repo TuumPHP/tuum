@@ -11,13 +11,6 @@ $tasks    = $data->extractKey('tasks');
 
 ?>
 
-<?php $this->blockAsSection('tasks/sub-menu', 'sub-menu', ['current' => 'list', 'base' => $view->data->basePath]); ?>
-
-<?php $this->startSection() ?>
-<li><a href="<?= $view->data->basePath; ?>" >Task Demo</a></li>
-<li class="active">Task List</li>
-<?php $this->endSectionAs('breadcrumb'); ?>
-
 <h1>Task Demo</h1>
 
 <style>

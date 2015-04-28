@@ -1,29 +1,23 @@
 <?php
 
-use Tuum\Web\Web;
-use Tuum\Web\Application;
-
 /**
  * function to pre-process before booting a web application.
  * $boot must exist.
  *
- * @param array $config
- * @return Application
  */
 
-return function( array $config ) use($boot) {
+return function($debug, $var_dir=null) {
 
-    /*
-     * read compiled php file,
-     * if debug is false, and compiled.php exists.
-     */
-    $compiled = $config[Web::VAR_DATA_DIR].'/compiled.php';
-    if(!$config[Web::DEBUG] && file_exists($compiled)) {
-        include_once($compiled);
+    if(!isset($debug) || $debug) {
+        return;
     }
 
-    /*
-     * build $boot.
-     */
-    return $boot($config);
+    if(!isset($var_dir)) {
+        $var_dir = dirname(dirname(__DIR__)).'/var';
+    }
+    $compiled = $var_dir.'/compiled.php';
+    if(file_exists($compiled)) {
+        include_once($compiled);
+    }
 };
+

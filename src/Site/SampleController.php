@@ -112,11 +112,11 @@ class SampleController extends AbstractController
                 ->withInput($this->validator->getData())
                 ->withInputErrors($this->validator->getErrors())
                 ->withError('bad input.')
-                ->toBasePath('/create');
+                ->toReferrer();
         }
         return $this->redirect()
             ->withInput($this->validator->getData())
             ->withMessage('good input.')
-            ->toBasePath('/create');
+            ->toReferrer();
     }
 }

@@ -7,11 +7,11 @@ use Tuum\Web\View\Value;
 
 // main title in header. 
 if (!isset($title)) {
-    $title = 'TuumPHP Demo';
+    $title = 'Tuum Demo';
 }
 
 // set menu highlight
-$current = $view->data->current ?: 'none';
+$current = isset($navMenu) ? $navMenu: 'none';
 $activate = function($case) use($current) {
     return $case === $current ? ' class="active"': '';
 };
@@ -42,6 +42,10 @@ $activate = function($case) use($current) {
         div#main {
             margin-bottom: 8em;
         }
+        p.nav-header {
+            margin: 1em 0 1em 0;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -57,14 +61,14 @@ $activate = function($case) use($current) {
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">TuumPHP</a>
+            <a class="navbar-brand" href="/">Tuum</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li<?= $activate('maps');?>><a href="/docs/index.php">URL Maps</a></li>
-                <li<?= $activate('closure');?>><a href="/closure/view">Closure Routes</a></li>
-                <li<?= $activate('controller');?>><a href="/sample?name=TuumPHP">Controller Sample</a></li>
+                <li<?= $activate('docs');?>><a href="/docs/index">Documents</a></li>
+                <li<?= $activate('closure');?>><a href="/closure/view">Closure Sample</a></li>
+                <li<?= $activate('sample');?>><a href="/sample?name=Tuum+framework">Controller Sample</a></li>
                 <li<?= $activate('demoTasks' );?>><a href="/demoTasks">Task Demo</a></li>
             </ul>
         </div>
@@ -109,7 +113,7 @@ $activate = function($case) use($current) {
 
 <nav id="footer" class="nav navbar-fixed-bottom">
     <div class="container">
-        <h4>TuumPHP framework.</h4>
+        <h4>Tuum framework.</h4>
         <p><em>Tuum</em> means 'yours' in Latin; so it happens to the same pronunciation as 'stack' in Japanese. </p>
     </div>
 </nav>

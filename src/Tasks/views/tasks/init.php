@@ -9,13 +9,6 @@ $basePath = $data['basePath'];
 
 ?>
 
-<?php $this->blockAsSection('tasks/sub-menu', 'sub-menu', ['current' => 'init', 'base' => $view->data->basePath]); ?>
-
-<?php $this->startSection() ?>
-<li><a href="<?= $view->data->basePath; ?>" >Task Demo</a></li>
-<li class="active">Initialize List</li>
-<?php $this->endSectionAs('breadcrumb'); ?>
-
 <style type="text/css">
     .init-box {
         text-align: center;

@@ -4,21 +4,23 @@ use Demo\Tasks\TaskController;
 use Demo\Tasks\TaskDao;
 use League\Container\Container;
 use Tuum\Router\RouteCollector;
-use Tuum\View\Tuum\Renderer;
+use Tuum\View\Renderer;
+use Tuum\Web\View\ViewEngineInterface;
 use Tuum\Web\Application;
 use Tuum\Web\Stack\RouterStack;
 use Tuum\Web\Web;
 
+/** @var Web $web */
 /** @var Application $app */
-/** @var RouterStack $routeStack */
+/** @var RouterStack $stack */
 /** @var RouteCollector $routes */
 /** @var Container $dic */
 
 /**
  * set up TaskDao factory.
  */
-$app->set( TaskDao::class, function() use($dic) {
-    return new TaskDao($dic->get(Web::VAR_DATA_DIR).'/data/tasks.csv');
+$app->set( TaskDao::class, function() use($web) {
+    return new TaskDao($web->vars_dir.'/data/tasks.csv');
 });
 
 
@@ -29,8 +31,7 @@ $app->set( TaskDao::class, function() use($dic) {
  * using {*} so that task application does not have to
  * know its root directory.
  */
-$routeStack = $app->get(Web::ROUTER_STACK);
-$routes     = $routeStack->getRouting();
+$routes     = $stack->getRouting();
 
 $routes->any('/*', TaskController::class);
 
@@ -42,13 +43,15 @@ $routes->any('/*', TaskController::class);
  * specify another directory if there are another
  * view directory prepared for the demo.
  */
-/** @var Renderer $views */
-$views = $app->get(Web::RENDER_ENGINE);
+/** @var ViewEngineInterface $views */
+$views = $app->get(ViewEngineInterface::class);
 
-if (isset($view_dir) && $view_dir) {
-    $views->locator->addRoot($view_dir);
-} else {
-    $views->locator->addRoot(dirname(__DIR__) . '/views');
+if (!isset($view_dir) || !$view_dir) {
+    $view_dir = dirname(__DIR__) . '/views';
 }
+$views->modRenderer(function($renderer) use($view_dir) {
+    /** @var Renderer $renderer */
+    $renderer->setRoot($view_dir);
+});
 
-return $routeStack;
+return $stack;
