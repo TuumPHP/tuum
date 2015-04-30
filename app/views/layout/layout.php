@@ -11,9 +11,9 @@ if (!isset($title)) {
 }
 
 // set menu highlight
-$current = isset($navMenu) ? $navMenu: 'none';
-$activate = function($case) use($current) {
-    return $case === $current ? ' class="active"': '';
+$navMenu = isset($navMenu) ? $navMenu: 'none';
+$activate = function($case) use($navMenu) {
+    return $case === $navMenu ? ' class="active"': '';
 };
 
 ?>
@@ -89,7 +89,7 @@ $activate = function($case) use($current) {
 
     <?= $this->getSection('jumbotron'); ?>
     
-    <?= isset($view) ? $view->message : ''; ?>
+    <?= $view->message; ?>
     
     <?php if($this->sectionExists('sideBar', 'sub-menu')) : ?>
         
