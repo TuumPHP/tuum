@@ -32,11 +32,13 @@ class ViewComposer implements ReleaseInterface
             return $response;
         }
 
-        $this->setLayout($request, $response);
-        
+        // set main layout based on root uri.
         $root = explode('/', trim($request->getUri()->getPath(), '/'))[0];
+        $this->setLayout($response, $root);
+
+        // set sub-menu based on root uri.
         if ($root === 'docs') {
-            $this->viewDocs($request, $response);
+            $this->viewDocs($request, $response, $root);
         }
         elseif ($root === 'demoTasks') {
             $this->viewDemoTasks($request, $response, $root);
@@ -46,48 +48,44 @@ class ViewComposer implements ReleaseInterface
     }
 
     /**
-     * set up for docs directory served by DocView.
+     * set up for directory served by demoTasks.
      *
      * @param Request  $request
      * @param Response $response
+     * @param string   $root
      */
     private function viewDemoTasks($request, $response, $root)
     {
-        // start with file name. 
-        $file_name = basename($request->getUri()->getPath());
-        // find breadcrumb title. 
+        // find breadcrumb title.
         $titleList   = [
             'index'   => 'Task List',
             'create'   => 'Create New Task',
             'init'     => 'Initialization',
         ];
-        $file_name = isset($titleList[$file_name]) ? $file_name: 'index';
-        $breadTitle = $titleList[$file_name];
-        $breadcrumb = "<li><a href=\"/demoTasks/\" >Task Demo</a></li>\n".
-            "<li class=\"active\">{$breadTitle}</li>";
+        $file_name  = $this->buildFileName($request, $titleList);
+        $breadcrumb = $this->buildBreadCrumb($titleList, $file_name);
 
         /** @var ViewStream $view */
         $view = $response->getBody();
-        $view->modRenderer(function($renderer) use($breadcrumb, $file_name, $root) {
+        $data = ['file_name' => $file_name, 'base' => $root];
+        $view->modRenderer(function($renderer) use($breadcrumb, $data) {
             /** @var Renderer $renderer */
             $renderer->setSection('breadcrumb', $breadcrumb);
-            $renderer->blockAsSection('tasks/sub-menu', 'sub-menu', ['file_name' => $file_name, 'base' => $root]);
+            $renderer->blockAsSection('tasks/sub-menu', 'sub-menu', $data);
             return $renderer;
         });
     }
 
     /**
-     * set up for docs directory served by DocView.
+     * set up for directory served by DocView.
      * 
      * @param Request  $request
      * @param Response $response
+     * @param string   $root
      */
-    private function viewDocs($request, $response)
+    private function viewDocs($request, $response, $root)
     {
-        // start with file name. 
-        $file_name = basename($request->getUri()->getPath());
-
-        // find breadcrumb title. 
+        // find breadcrumb title.
         $titleList   = [
             'index'            => 'Documents Top',
             'quick-install'    => 'Installation',
@@ -95,36 +93,58 @@ class ViewComposer implements ReleaseInterface
             'quick-controller' => 'Controller and View',
             '' => '',
         ];
-        $file_name = isset($titleList[$file_name]) ? $file_name: 'index';
-        $breadTitle = $titleList[$file_name];
-        $breadcrumb = "<li><a href=\"/docs/index\" >Documents</a></li>\n".
-            "<li class=\"active\">{$breadTitle}</li>";
-        
+        $file_name  = $this->buildFileName($request, $titleList);
+        $breadcrumb = $this->buildBreadCrumb($titleList, $file_name);
+
         /** @var ViewStream $view */
         $view = $response->getBody();
-        $view->modRenderer(function($renderer) use($breadcrumb, $file_name) {
+        $data = ['file_name' => $file_name, 'base' => $root];
+        $view->modRenderer(function($renderer) use($breadcrumb, $data) {
             /** @var Renderer $renderer */
             $renderer->setSection('breadcrumb', $breadcrumb);
-            $renderer->blockAsSection('layout/docs-layout', 'sub-menu', ['file_name' => $file_name]);
+            $renderer->blockAsSection('layout/docs-subMenu', 'sub-menu', $data);
             return $renderer;
         });
     }
 
     /**
      * set up default layout file for templates.
-     * 
-     * @param Request  $request
+     *
      * @param Response $response
+     * @param string   $root
      */
-    private function setLayout($request, $response)
+    private function setLayout($response, $root)
     {
-        $path = $request->getUri()->getPath();
-        $root = explode('/', trim($path, '/'))[0];
         /** @var ViewStream $view */
         $view = $response->getBody();
         $view->modRenderer(function ($renderer) use ($root) {
             /** @var Renderer $renderer */
             $renderer->setLayout('/layout/layout', ['navMenu' => $root]);
         });
+    }
+
+    /**
+     * @param Request $request
+     * @param string $titleList
+     * @return string
+     */
+    private function buildFileName($request, $titleList)
+    {
+        $file_name = basename($request->getUri()->getPath());
+        $file_name = isset($titleList[$file_name]) ? $file_name : 'index';
+        return $file_name;
+    }
+
+    /**
+     * @param $titleList
+     * @param $file_name
+     * @return string
+     */
+    private function buildBreadCrumb($titleList, $file_name)
+    {
+        $breadTitle = $titleList[$file_name];
+        $breadcrumb = "<li><a href=\"/demoTasks/\" >Task Demo</a></li>\n" .
+            "<li class=\"active\">{$breadTitle}</li>";
+        return $breadcrumb;
     }
 }
