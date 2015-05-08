@@ -1,3 +1,11 @@
+<?php
+use Tuum\View\Renderer;
+
+/** @var Renderer $this */
+
+$this->setLayout('layout/layout');
+
+?>
 
 <h1>A Generic Error Happened</h1>
 
