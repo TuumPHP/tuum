@@ -29,20 +29,20 @@ $config = ClassLoader::getIncludes(function( ClassLoader $loader) {
     );
 
     /**
-     * load $app, request, and response. 
+     * load $app, request, and response.
      */
     /** @var Closure $boot */
     /** @var Web $app */
     /** @noinspection PhpUnusedLocalVariableInspection */
     $xhProf_limit = false;
     /** @noinspection PhpUnusedLocalVariableInspection */
-    $debug        = true;
+    $debug        = false;
     $app = include dirname(__DIR__).'/app.php';
 
-    $request  = RequestFactory::fromPath('no-such');
+    $request  = RequestFactory::fromPath('no-such')->withApp($app);
     $app->__invoke($request);
     $request->respond()->asForbidden();
-    
+
     /**
      * try session stuff.
      */

@@ -14,10 +14,10 @@ $data  = $view->data;
 
 <?php $this->blockAsSection('controller/sub-menu', 'sub-menu', ['current' => 'forms']); ?>
 
-<?php $this->startSection() ?>
+<?php $this->section->start() ?>
 <li><a href="<?= $data->basePath; ?>?name=Controller Sample" >Controller Sample</a></li>
 <li class="active">Forms Sample</li>
-<?php $this->endSectionAs('breadcrumb'); ?>
+<?php $this->section->saveAs('breadcrumb'); ?>
 
 <h1>Form Samples</h1>
 

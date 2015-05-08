@@ -3,10 +3,10 @@
 
 <?php $view->data['current'] = 'closure'; ?>
 
-<?php $this->startSection() ?>
+<?php $this->section->start() ?>
 <li><a href="/closure/view" >Closure Sample</a></li>
 <li class="active">view file</li>
-<?php $this->endSectionAs('breadcrumb'); ?>
+<?php $this->section->saveAs('breadcrumb'); ?>
 
 <html>
 <body>

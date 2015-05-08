@@ -6,6 +6,7 @@
 
 use Demo\Site\ViewComposer;
 use Tuum\Web\Psr7\Request;
+use Tuum\Web\Psr7\Respond;
 use Tuum\Web\Web;
 
 date_default_timezone_set('Asia/Tokyo');
@@ -34,22 +35,32 @@ call_user_func(
 #
 
 
-$app = Web::forge(__DIR__, $debug);
-$app
+$web = Web::forge(__DIR__, $debug);
+$web
+    ->cacheApp(function($web) {
+        /** @var Web $web */
+        $web
+            ->catchError([
+                'errors/error', // default error view
+                Respond::ACCESS_DENIED  => 'errors/forbidden',
+                Respond::FILE_NOT_FOUND => 'errors/not-found',
+            ])
+            ->pushSessionStack()
+            ->push($web->get(ViewComposer::class))
+            ->pushViewStack()
+            ->pushCsRfStack()
+            ->loadContainer()
+        ;
+    })
     ->loadConfig()
-    ->loadEnvironment($app->vars_dir . '/env')
-    ->catchError()
-    ->pushSessionStack()
-    ->push($app->get(ViewComposer::class))
-    ->pushViewStack()
-    ->pushCsRfStack()
-    ->pushConfig($app->config_dir . '/routes')
-    ->pushConfig($app->config_dir . '/route-tasks')
-    ->pushConfig($app->config_dir . '/documents')
+    ->loadEnvironment($web->vars_dir . '/env')
+    ->pushConfig($web->config_dir . '/routes')
+    ->pushConfig($web->config_dir . '/route-tasks')
+    ->pushConfig($web->config_dir . '/documents')
 ;
 
 # add a closure for testing purpose only.
-$app->prepend(
+$web->prepend(
     function ($request, $next) {
         /** @var Request $request */
         return $next ? $next($request->withAttribute('closure', function () {
@@ -57,4 +68,4 @@ $app->prepend(
         })) : null;
     });
 
-return $app;
+return $web->getApp();

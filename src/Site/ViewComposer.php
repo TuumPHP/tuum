@@ -70,7 +70,7 @@ class ViewComposer implements ReleaseInterface
         $data = ['file_name' => $file_name, 'base' => $root];
         $view->modRenderer(function($renderer) use($breadcrumb, $data) {
             /** @var Renderer $renderer */
-            $renderer->setSection('breadcrumb', $breadcrumb);
+            $renderer->section->set('breadcrumb', $breadcrumb);
             $renderer->blockAsSection('tasks/sub-menu', 'sub-menu', $data);
             return $renderer;
         });
@@ -78,7 +78,7 @@ class ViewComposer implements ReleaseInterface
 
     /**
      * set up for directory served by DocView.
-     * 
+     *
      * @param Request  $request
      * @param Response $response
      * @param string   $root
@@ -101,7 +101,7 @@ class ViewComposer implements ReleaseInterface
         $data = ['file_name' => $file_name, 'base' => $root];
         $view->modRenderer(function($renderer) use($breadcrumb, $data) {
             /** @var Renderer $renderer */
-            $renderer->setSection('breadcrumb', $breadcrumb);
+            $renderer->section->set('breadcrumb', $breadcrumb);
             $renderer->blockAsSection('layout/docs-subMenu', 'sub-menu', $data);
             return $renderer;
         });

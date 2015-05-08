@@ -2,10 +2,10 @@
 
 <?php $this->blockAsSection('controller/sub-menu', 'sub-menu', ['current' => 'hello']); ?>
 
-<?php $this->startSection() ?>
+<?php $this->section->start() ?>
 <li><a href="<?= $view->data->basePath; ?>?name=Controller Sample" >Controller Sample</a></li>
 <li class="active">Hello</li>
-<?php $this->endSectionAs('breadcrumb'); ?>
+<?php $this->section->saveAs('breadcrumb'); ?>
 
 
 <?php

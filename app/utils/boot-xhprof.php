@@ -2,10 +2,15 @@
 
 /**
  * enable xh-profiler
+ *
+ * @param bool|float $xhProf_limit
  */
 return function ($xhProf_limit) {
 
     if (!function_exists('xhprof_enable')) {
+        return;
+    }
+    if ($xhProf_limit === false || !is_numeric($xhProf_limit)) {
         return;
     }
     xhprof_enable();

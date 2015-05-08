@@ -76,27 +76,27 @@ $activate = function($case) use($navMenu) {
     </div>
 </nav>
 
-<?php $this->startSection(); ?>
+<?php $this->section->start(); ?>
 
 <ol class="breadcrumb">
     <li><a href="/" >Main Page</a></li>
-    <?= $this->getSection('breadcrumb'); ?>
+    <?= $this->section->get('breadcrumb'); ?>
 </ol>
 
-<?php $this->renderAsSection('breadcrumb'); ?>
+<?php $this->section->renderAs('breadcrumb'); ?>
 
 <div class="container" id="main">
 
-    <?= $this->getSection('jumbotron'); ?>
+    <?= $this->section->get('jumbotron'); ?>
     
     <?= $view->message; ?>
     
-    <?php if($this->sectionExists('sideBar', 'sub-menu')) : ?>
+    <?php if($this->section->exists('sideBar', 'sub-menu')) : ?>
         
         <div class="col-md-3">
             <br/>
-            <?= $this->getSection('sub-menu'); ?>
-            <?= $this->getSection('sideBar'); ?>
+            <?= $this->section->get('sub-menu'); ?>
+            <?= $this->section->get('sideBar'); ?>
         </div>
         <div class="col-md-9">
             <?= $this->getContent();?>

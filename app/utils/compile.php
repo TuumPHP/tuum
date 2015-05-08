@@ -21,6 +21,7 @@ $outputPath  = dirname(dirname(__DIR__)).'/var/compiled.php';
 /*
  * run compilation
  */
+unlink($outputPath);
 $command = new PreCompileCommand();
 $command->run(
     new ArrayInput([

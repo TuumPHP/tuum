@@ -11,11 +11,11 @@ $errors= $view->errors;
 
 <?php $this->blockAsSection('controller/sub-menu', 'sub-menu', ['current' => 'create']); ?>
 
-<?php $this->startSection() ?>
+<?php $this->section->start() ?>
 <li><a href="<?= $view->data->basePath; ?>?name=Controller Sample">Controller Sample</a></li>
 <li class="active">Create</li>
 
-<?php $this->endSectionAs('breadcrumb'); ?>
+<?php $this->section->saveAs('breadcrumb'); ?>
 
 <h1>Create Form</h1>
 

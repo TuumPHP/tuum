@@ -11,7 +11,7 @@
   "minimum-stability": "dev",
   "require": {
     "classpreloader/classpreloader": "~1.0",
-    "tuum/web":"0.7.*"
+    "tuum/web":"0.8.*"
   },
   "repositories": [
   ],
