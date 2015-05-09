@@ -140,7 +140,7 @@ class TaskController extends AbstractController
      */
     public function onInsert()
     {
-        $input = $this->request->getBodyParams();
+        $input = $this->request->getParsedBody();
         $errors = $this->validate($input);
         if(!empty($errors)) {
             return $this->redirect()

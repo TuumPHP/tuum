@@ -20,7 +20,8 @@ $config = [
 
 /** @var Web $app */
 $config = call_user_func(include($app_dir.'/config.php'), $config);
-$app    = call_user_func(include($app_dir.'/app.php'), $config);
+$app    = call_user_func(include($app_dir.'/app-fast.php'), $config);
+
 
 #
 # run the $app. 

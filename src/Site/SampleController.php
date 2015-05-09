@@ -107,7 +107,7 @@ class SampleController extends AbstractController
      */
     protected function onInsert()
     {
-        if(!$this->validator->validate($this->request->getBodyParams())) {
+        if(!$this->validator->validate($this->request->getParsedBody())) {
             return $this->redirect()
                 ->withInput($this->validator->getData())
                 ->withInputErrors($this->validator->getErrors())
