@@ -33,11 +33,8 @@ $config = ClassLoader::getIncludes(function( ClassLoader $loader) {
      */
     /** @var Closure $boot */
     /** @var Web $app */
-    /** @noinspection PhpUnusedLocalVariableInspection */
-    $xhProf_limit = false;
-    /** @noinspection PhpUnusedLocalVariableInspection */
-    $debug        = false;
-    $app = include dirname(__DIR__).'/app.php';
+    $config = call_user_func(include(dirname(__DIR__).'/config.php'), ['debug' => false, 'xhProf' => false]);
+    $app    = call_user_func(include(dirname(__DIR__).'/app.php'), $config);
 
     $request  = RequestFactory::fromPath('no-such')->withApp($app);
     $app->__invoke($request);
