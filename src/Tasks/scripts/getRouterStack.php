@@ -1,6 +1,6 @@
 <?php
 
-use App\Controller\TaskController;
+use Demo\Tasks\TaskController;
 use Demo\Tasks\TaskDao;
 use League\Container\Container;
 use Tuum\Router\RouteCollector;
