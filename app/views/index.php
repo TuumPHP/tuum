@@ -4,6 +4,8 @@
 
 <?php $this->section->start(); ?>
 
+<!-- Section: Jumbotron -->
+
 <div class="jumbotron" style="margin-top:20px;">
     <h1>Tuum framework</h1>
     <p>Tuum is yet-another PHP framework for building a web site.</p>
@@ -11,6 +13,8 @@
 </div>
 
 <?php $this->section->saveAs('jumbotron'); ?>
+
+<!-- Content: index -->
 
 <div class="col-md-4">
     <h3><a href="docs/index" >Documents</a></h3>
