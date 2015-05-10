@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller;
+namespace Demo\Tasks;
 
 use Demo\Tasks\TaskDao;
 use Tuum\Web\Controller\AbstractController;
