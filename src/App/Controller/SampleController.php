@@ -1,5 +1,5 @@
 <?php
-namespace Demo\Site;
+namespace App\Controller;
 
 use Tuum\Web\Controller\AbstractController;
 use Tuum\Web\Controller\RouteDispatchTrait;

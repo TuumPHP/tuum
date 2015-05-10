@@ -1,6 +1,7 @@
 <?php
-namespace Demo\Tasks;
+namespace App\Controller;
 
+use Demo\Tasks\TaskDao;
 use Tuum\Web\Controller\AbstractController;
 use Tuum\Web\Controller\RouteDispatchTrait;
 use Tuum\Web\Psr7\Response;

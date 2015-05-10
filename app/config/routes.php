@@ -8,7 +8,7 @@
  * must return the $stack to push to the stack.
  * 
  */
-use Demo\Site\SampleController;
+use App\Controller\SampleController;
 use Tuum\Router\RouteCollector;
 use Tuum\Web\Psr7\Request;
 use Tuum\Web\Stack\RouterStack;

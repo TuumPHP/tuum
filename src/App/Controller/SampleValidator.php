@@ -1,5 +1,5 @@
 <?php
-namespace Demo\Site;
+namespace App\Controller;
 
 class SampleValidator
 {

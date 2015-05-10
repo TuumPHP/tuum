@@ -1,5 +1,5 @@
 <?php
-namespace Demo\Site;
+namespace App\View;
 
 use Tuum\View\Renderer;
 use Tuum\Web\Psr7\Request;

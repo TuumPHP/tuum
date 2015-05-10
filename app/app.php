@@ -4,7 +4,7 @@
  * Create The Web Application, $app.
  */
 
-use Demo\Site\ViewComposer;
+use App\View\ViewComposer;
 use Tuum\Web\Application;
 use Tuum\Web\Psr7\Respond;
 use Tuum\Web\Web;
