@@ -49,6 +49,7 @@ return function(array $config)
                 ->pushSessionStack()
                 ->pushCsRfStack('post:/*')
                 ->pushViewStack($web->get(ViewComposer::class))
+                ->pushConfig($web->config_dir . '/documents')
                 ->loadContainer()
             ;
         })
@@ -56,7 +57,6 @@ return function(array $config)
         ->loadEnvironment($web->vars_dir . '/env')
         ->pushConfig($web->config_dir . '/routes')
         ->pushConfig($web->config_dir . '/route-tasks')
-        ->pushConfig($web->config_dir . '/documents')
     ;
 
     return $web->getApp();

@@ -24,30 +24,12 @@ $activate = function($case) use($navMenu) {
     <title><?= $title; ?></title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/common/tuum.css">
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <!--suppress CssUnusedSymbol -->
-    <style type="text/css">
-        nav#footer {
-            background-color: #f0f0f0;
-            border-top: 1px solid #cccccc;
-        }
-        nav#header {
-            margin-bottom: 0;
-        }
-        ol.breadcrumb {
-            border-radius: 0;
-            background-color: #e7e7e7;
-        }
-        div#main {
-            margin-bottom: 8em;
-        }
-        p.nav-header {
-            margin: 1em 0 1em 0;
-            font-weight: bold;
-        }
-    </style>
+    <style type="text/css"></style>
 </head>
 <body>
 
