@@ -49,7 +49,7 @@ return function(array $config)
                 ->pushSessionStack()
                 ->pushCsRfStack('post:/*')
                 ->pushViewStack($web->get(ViewComposer::class))
-                ->pushConfig($web->config_dir . '/documents')
+                ->pushDocViewStack($web->app_dir.'/documents', ['enable_raw' => true])
                 ->loadContainer()
             ;
         })
