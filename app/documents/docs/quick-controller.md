@@ -22,9 +22,9 @@ $routes->any( '/controller{*}', SampleController::class);
 
 which implies that ```SampleController``` class will handle any path starting with '/sample'. 
 
-The trailing ```{*}``` in the route pattern denotes that the router will set the base path to ```/sample``` and the remaing path will be used for matching a route. 
+*   The trailing ```{*}``` in the route pattern denotes that the router will set the base path to ```/sample``` and the remaing path will be used for matching a route. 
 
-The route also defines a before filter using a closure which sets an attribute ```current``` to be ```'controller'```. This variable is used for the main menu in a layout view. The ```$request``` is returned back to the middleware chain by using ```$next``` callable. 
+*   The route also defines a before filter using a closure which sets an attribute ```current``` to be ```'controller'```. This variable is used for the main menu in a layout view. The ```$request``` is returned back to the middleware chain by using ```$next``` callable. 
 
 SampleController.php
 ----
