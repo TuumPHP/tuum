@@ -55,7 +55,7 @@ return function(array $config)
         })
         ->loadConfig()
         ->loadEnvironment($web->vars_dir . '/env')
-        ->pushConfig($web->config_dir . '/routes')
+        ->pushConfig($web->config_dir . '/routes')   // <- routing
         ->pushConfig($web->config_dir . '/route-tasks')
     ;
 
