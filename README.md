@@ -37,7 +37,7 @@ This repository requires PHP >= 5.6.0.
 use ```git``` and ```composer``` to install. 
 
 ```sh
-git clone https://github.com/TuumPHP/tuum
+git clone https://github.com/TuumPHP/tuum -b 0.1.0
 cd tuum
 composer install
 cd public
