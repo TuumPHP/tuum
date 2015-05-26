@@ -67,6 +67,7 @@ class SampleController extends AbstractController
     protected function onJump()
     {
         return $this->respond()
+            ->with('flashed', $this->request->getAttribute('flashed'))
             ->asView('controller/jump')
             ;
     }
@@ -78,6 +79,7 @@ class SampleController extends AbstractController
     protected function onJumper($message='jumped')
     {
         return $this->redirect()
+            ->withFlashData('flashed', 'this is via flash: '.$message)
             ->withMessage($message)
             ->toBasePath('jump')
             ;

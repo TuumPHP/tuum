@@ -19,3 +19,8 @@
     <input type="submit" value="jump" />
 </form>
 
+<?php
+if ($view->data->flashed) {
+    echo '<br/><div class="alert alert-info" >', $view->data->flashed, '</div>';
+}
+
