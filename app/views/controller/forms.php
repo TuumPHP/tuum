@@ -7,7 +7,7 @@ use Tuum\Web\View\Value;
 /** @var Value $view */
 
 $forms = $view->forms;
-$dates = $view->dates;
+$dates = $view->dates->withClass('form-control')->resetWidth();
 $data  = $view->data;
 
 ?>
@@ -33,7 +33,7 @@ $data  = $view->data;
     <li><?= $forms->radio('radio', 1)->checked()->label('a radio button'); ?></li>
     <li>
         <?= $forms->open()->method('post')->uploader(); ?>
-        <?= $forms->submit('a post form'); ?>
+        <?= $forms->submit('a post form')->class('btn btn-primary'); ?>
         <?= $forms->reset('a reset/cancel button'); ?>
         <?= $forms->close(); ?>
     </li>
@@ -52,7 +52,7 @@ $data  = $view->data;
     <dt>Select Box</dt>
     <dd><?= $forms->select('select-box',
             Lists::forge(1, 10, 3)->setFormat(function($s) {return 'selecting #'.$s;})
-        ); ?>
+        )->class('form-control'); ?>
     </dd>
     
     <dt>Radio List</dt>
