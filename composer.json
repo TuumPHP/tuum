@@ -8,10 +8,9 @@
       "email": "kamei@workspot.jp"
     }
   ],
-  "minimum-stability": "dev",
   "require": {
     "classpreloader/classpreloader": "~1.0",
-    "tuum/web":"0.9.*"
+    "tuum/web":"~0.10"
   },
   "repositories": [
   ],
